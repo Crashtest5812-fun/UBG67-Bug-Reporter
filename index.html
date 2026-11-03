@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <title>UBG67 Support — Bug Reports</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f6f7f2;
+      --white: #fff;
+      --ink: #202721;
+      --muted: #788078;
+      --line: #e6e9e1;
+      --green: #275b48;
+      --green-soft: #e7f0e9;
+      --red: #d65b43;
+      --red-soft: #fae9e4;
+      --yellow: #e5ba57;
+      --yellow-soft: #f7f0dc;
+      --blue: #577998;
+      --blue-soft: #e9eff4;
+      --shadow: 0 18px 60px rgb(26 39 29 / 14%);
+      font-family: "Manrope", sans-serif;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+
+    * { box-sizing: border-box; }
+    body { margin: 0; min-width: 320px; min-height: 100vh; color: var(--ink); background: var(--paper); }
+    button, input, select, textarea { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible { outline: 3px solid rgb(39 91 72 / 28%); outline-offset: 2px; }
+    .app { min-height: 100vh; display: grid; grid-template-columns: 232px minmax(0, 1fr); }
+    .sidebar { display: flex; flex-direction: column; padding: 27px 16px 18px; background: #fff; border-right: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 11px; padding: 0 10px 32px; }
+    .brand-mark { width: 31px; height: 31px; display: grid; place-items: center; color: white; background: var(--green); border-radius: 9px; font-size: 15px; font-weight: 800; }
+    .brand-name { font-size: 17px; font-weight: 800; letter-spacing: 0; }
+    .brand-name span { color: var(--green); }
+    .side-label { margin: 0 10px 10px; color: #929991; font: 10px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+    .nav { display: grid; gap: 4px; }
+    .nav-button { width: 100%; display: flex; align-items: center; gap: 11px; padding: 10px 11px; border: 0; border-radius: 6px; background: transparent; color: #626b63; text-align: left; cursor: pointer; font-size: 12px; font-weight: 700; }
+    .nav-button:hover { background: #f6f7f4; }
+    .nav-button.active { color: var(--green); background: var(--green-soft); }
+    .nav-icon { width: 17px; display: inline-grid; place-items: center; font-size: 15px; }
+    .nav-count { margin-left: auto; color: #8d958d; font: 10px "DM Mono", monospace; }
+    .side-bottom { margin-top: auto; padding: 16px 10px 2px; border-top: 1px solid var(--line); }
+    .local-note { display: flex; align-items: flex-start; gap: 8px; color: var(--muted); font-size: 10px; line-height: 1.6; }
+    .local-dot { width: 7px; height: 7px; flex: 0 0 7px; margin-top: 4px; border-radius: 50%; background: #62a77d; }
+    .workspace { min-width: 0; padding: 31px clamp(22px, 5vw, 72px) 48px; }
+    .topbar { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .eyebrow { margin: 0 0 5px; color: var(--muted); font: 10px "DM Mono", monospace; letter-spacing: .06em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(24px, 3vw, 30px); line-height: 1.2; letter-spacing: 0; }
+    .top-actions { display: flex; align-items: center; gap: 8px; }
+    .button { min-height: 38px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 13px; border: 1px solid var(--line); border-radius: 5px; background: var(--white); color: var(--ink); cursor: pointer; font-size: 11px; font-weight: 800; transition: background .15s, transform .15s; }
+    .button:hover { background: #f4f6f1; }
+    .button:active { transform: translateY(1px); }
+    .button-primary { border-color: var(--green); background: var(--green); color: white; }
+    .button-primary:hover { background: #1d4938; }
+    .button-icon { font-size: 15px; line-height: 1; }
+    .stats { max-width: 1100px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 28px auto 30px; border: 1px solid var(--line); border-radius: 7px; background: var(--white); }
+    .stat { min-width: 0; padding: 15px 19px 16px; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat-label { display: block; margin-bottom: 8px; color: var(--muted); font: 10px "DM Mono", monospace; text-transform: uppercase; }
+    .stat-value { display: flex; align-items: center; gap: 7px; font-size: 22px; font-weight: 800; line-height: 1; }
+    .stat-mark { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .stat:nth-child(2) .stat-mark { background: var(--red); }
+    .stat:nth-child(3) .stat-mark { background: var(--yellow); }
+    .stat:nth-child(4) .stat-mark { background: var(--blue); }
+    .report-section { max-width: 1100px; margin: 0 auto; }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 14px; padding-bottom: 13px; border-bottom: 1px solid var(--line); }
+    .list-heading { display: flex; align-items: baseline; gap: 9px; }
+    h2 { margin: 0; font-size: 15px; font-weight: 800; }
+    .result-count { color: var(--muted); font: 10px "DM Mono", monospace; }
+    .filters { display: flex; align-items: center; gap: 8px; }
+    .search { width: min(230px, 25vw); height: 34px; padding: 0 11px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: var(--ink); font-size: 11px; }
+    .severity-filter { height: 34px; padding: 0 26px 0 9px; border: 1px solid var(--line); border-radius: 5px; background: #fff; color: #596159; font-size: 10px; }
+    .table-head, .report-row { display: grid; grid-template-columns: minmax(220px, 1fr) 116px 108px 120px; align-items: center; gap: 14px; }
+    .table-head { padding: 13px 15px 8px; color: #8a928b; font: 9px "DM Mono", monospace; letter-spacing: .04em; text-transform: uppercase; }
+    .report-list { display: grid; }
+    .report-row { width: 100%; min-height: 65px; padding: 10px 15px; border: 0; border-bottom: 1px solid var(--line); background: transparent; text-align: left; cursor: pointer; }
+    .report-row:hover { background: rgb(255 255 255 / 70%); }
+    .report-title { display: block; overflow: hidden; color: var(--ink); font-size: 11px; font-weight: 800; text-overflow: ellipsis; white-space: nowrap; }
+    .report-meta { display: block; margin-top: 5px; color: var(--muted); font: 9px "DM Mono", monospace; }
+    .severity, .status { width: fit-content; display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 4px; font: 9px "DM Mono", monospace; white-space: nowrap; }
+    .severity::before, .status::before { width: 6px; height: 6px; border-radius: 50%; background: currentColor; content: ""; }
+    .severity-critical { color: #a63f2e; background: var(--red-soft); }
+    .severity-high { color: #a45b25; background: #f8ecdf; }
+    .severity-medium { color: #866a20; background: var(--yellow-soft); }
+    .severity-low { color: #4d755b; background: var(--green-soft); }
+    .status-open { color: #a63f2e; background: var(--red-soft); }
+    .status-progress { color: #496c89; background: var(--blue-soft); }
+    .status-resolved { color: #4d755b; background: var(--green-soft); }
+    .report-date { color: var(--muted); font: 10px "DM Mono", monospace; }
+    .empty { padding: 60px 20px; text-align: center; }
+    .empty-symbol { width: 42px; height: 42px; display: grid; place-items: center; margin: 0 auto 13px; border-radius: 12px; background: var(--green-soft); color: var(--green); font-size: 20px; }
+    .empty h3 { margin: 0 0 6px; font-size: 14px; }
+    .empty p { margin: 0; color: var(--muted); font-size: 11px; }
+    .overlay { position: fixed; z-index: 3; inset: 0; display: grid; place-items: center; padding: 20px; background: rgb(25 34 27 / 42%); }
+    .overlay[hidden] { display: none; }
+    .dialog { width: min(610px, 100%); max-height: min(90vh, 850px); overflow: auto; border: 1px solid rgb(255 255 255 / 50%); border-radius: 8px; background: #fff; box-shadow: var(--shadow); animation: arrive .18s ease-out; }
+    @keyframes arrive { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+    .dialog-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 22px 24px 17px; border-bottom: 1px solid var(--line); }
+    .dialog-head h2 { font-size: 17px; }
+    .dialog-head p { margin: 5px 0 0; color: var(--muted); font-size: 10px; }
+    .close-button { width: 30px; height: 30px; display: grid; flex: 0 0 30px; place-items: center; border: 1px solid var(--line); border-radius: 5px; background: white; color: #727a72; cursor: pointer; font-size: 17px; }
+    .form { padding: 19px 24px 22px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .field { display: grid; gap: 6px; margin-bottom: 13px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { color: #525a52; font-size: 10px; font-weight: 800; }
+    .field label span { color: #979e97; font-weight: 500; }
+    .field input, .field select, .field textarea { width: 100%; min-height: 37px; padding: 9px 10px; border: 1px solid var(--line); border-radius: 4px; background: #fcfdfa; color: var(--ink); font-size: 11px; }
+    .field textarea { min-height: 74px; resize: vertical; line-height: 1.55; }
+    .field textarea.compact { min-height: 58px; }
+    .form-footer { display: flex; justify-content: flex-end; gap: 8px; padding-top: 5px; }
+    .detail-content { padding: 20px 24px 24px; }
+    .detail-title { margin: 0 0 13px; font-size: 20px; line-height: 1.4; overflow-wrap: anywhere; }
+    .detail-badges { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 22px; }
+    .detail-block { margin-top: 18px; }
+    .detail-block h3 { margin: 0 0 7px; color: #798178; font: 10px "DM Mono", monospace; text-transform: uppercase; }
+    .detail-block p { margin: 0; color: #3e473f; font-size: 11px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .detail-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 24px; padding-top: 15px; border-top: 1px solid var(--line); }
+    .detail-controls label { color: var(--muted); font-size: 10px; font-weight: 700; }
+    .detail-controls select { margin-left: 8px; padding: 7px 25px 7px 8px; border: 1px solid var(--line); border-radius: 4px; background: #fff; color: var(--ink); font-size: 10px; }
+    .button-danger { color: #a63f2e; }
+    .toast { position: fixed; z-index: 5; right: 22px; bottom: 20px; padding: 11px 15px; border-radius: 5px; background: #25372b; color: #fff; box-shadow: var(--shadow); font-size: 11px; animation: arrive .18s ease-out; }
+    .toast[hidden] { display: none; }
+    @media (max-width: 760px) {
+      .app { grid-template-columns: 1fr; }
+      .sidebar { padding: 13px 15px 0; border-right: 0; border-bottom: 1px solid var(--line); }
+      .brand { padding: 0 4px 12px; }
+      .side-label, .side-bottom { display: none; }
+      .nav { display: flex; gap: 3px; overflow-x: auto; padding-bottom: 10px; }
+      .nav-button { width: auto; flex: 0 0 auto; padding: 8px 10px; font-size: 10px; }
+      .nav-count { margin-left: 2px; }
+      .workspace { padding: 23px 18px 35px; }
+      .stats { margin: 21px auto 24px; }
+      .stat { padding: 12px 10px; }
+      .stat-value { font-size: 18px; }
+      .stat-label { font-size: 8px; }
+    }
+    @media (max-width: 540px) {
+      .topbar { align-items: flex-start; }
+      .top-actions { gap: 6px; }
+      .button { min-height: 35px; padding: 0 9px; font-size: 10px; }
+      .button-export { width: 35px; padding: 0; font-size: 0; }
+      .button-export .button-icon { font-size: 15px; }
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .stat:nth-child(3) { border-right: 1px solid var(--line); }
+      .list-toolbar { align-items: flex-start; flex-direction: column; }
+      .filters { width: 100%; }
+      .search { flex: 1; width: auto; }
+      .table-head, .report-row { grid-template-columns: minmax(0, 1fr) auto; gap: 7px 10px; }
+      .table-head { display: none; }
+      .report-row { padding: 12px 4px; }
+      .report-row > :nth-child(2) { grid-column: 2; grid-row: 1; }
+      .report-row > :nth-child(3) { grid-column: 1; grid-row: 2; }
+      .report-row > :nth-child(4) { grid-column: 2; grid-row: 2; text-align: right; }
+      .dialog-head, .form, .detail-content { padding-left: 17px; padding-right: 17px; }
+      .form-grid { grid-template-columns: 1fr; gap: 0; }
+      .field.full { grid-column: auto; }
+      .detail-title { font-size: 17px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar" aria-label="Main navigation">
+      <div class="brand"><div class="brand-mark" aria-hidden="true">U</div><div class="brand-name">UBG67 <span>Support</span></div></div>
+      <p class="side-label">Workspace</p>
+      <nav class="nav" aria-label="Report status">
+        <button class="nav-button active" type="button" data-status="all"><span class="nav-icon" aria-hidden="true">▤</span>All reports<span class="nav-count" id="nav-all">0</span></button>
+        <button class="nav-button" type="button" data-status="Open"><span class="nav-icon" aria-hidden="true">◉</span>Open<span class="nav-count" id="nav-open">0</span></button>
+        <button class="nav-button" type="button" data-status="In progress"><span class="nav-icon" aria-hidden="true">◷</span>In progress<span class="nav-count" id="nav-progress">0</span></button>
+        <button class="nav-button" type="button" data-status="Resolved"><span class="nav-icon" aria-hidden="true">✓</span>Resolved<span class="nav-count" id="nav-resolved">0</span></button>
+      </nav>
+      <p class="side-label" style="margin-top: 24px">Get involved</p>
+      <nav class="nav" aria-label="Community links">
+        <a class="nav-button" href="subscribe.html"><span class="nav-icon" aria-hidden="true">✉</span>Subscribe to UBG67</a>
+        <a class="nav-button" href="beta.html"><span class="nav-icon" aria-hidden="true">↗</span>Beta program</a>
+      </nav>
+      <div class="side-bottom"><div class="local-note"><span class="local-dot" aria-hidden="true"></span><span>Saved on this device. Your reports stay in this browser.</span></div></div>
+    </aside>
+
+    <main class="workspace">
+      <header class="topbar">
+        <div><p class="eyebrow">Bug tracker / Overview</p><h1>Issue inbox</h1></div>
+        <div class="top-actions">
+          <button class="button button-export" id="export-button" type="button" title="Export reports as JSON"><span class="button-icon" aria-hidden="true">↓</span>Export JSON</button>
+          <button class="button button-primary" id="new-report-button" type="button"><span class="button-icon" aria-hidden="true">+</span>New report</button>
+        </div>
+      </header>
+
+      <section class="stats" aria-label="Report summary">
+        <div class="stat"><span class="stat-label">Total reports</span><span class="stat-value"><i class="stat-mark"></i><span id="stat-total">0</span></span></div>
+        <div class="stat"><span class="stat-label">Open</span><span class="stat-value"><i class="stat-mark"></i><span id="stat-open">0</span></span></div>
+        <div class="stat"><span class="stat-label">In progress</span><span class="stat-value"><i class="stat-mark"></i><span id="stat-progress">0</span></span></div>
+        <div class="stat"><span class="stat-label">Resolved</span><span class="stat-value"><i class="stat-mark"></i><span id="stat-resolved">0</span></span></div>
+      </section>
+
+      <section class="report-section" aria-labelledby="report-heading">
+        <div class="list-toolbar">
+          <div class="list-heading"><h2 id="report-heading">All reports</h2><span class="result-count" id="result-count">0 issues</span></div>
+          <div class="filters">
+            <input class="search" id="search-input" type="search" placeholder="Search reports..." aria-label="Search reports">
+            <select class="severity-filter" id="severity-filter" aria-label="Filter by severity">
+              <option value="all">Any severity</option><option>Critical</option><option>High</option><option>Medium</option><option>Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="table-head" aria-hidden="true"><span>Issue</span><span>Severity</span><span>Status</span><span>Reported</span></div>
+        <div class="report-list" id="report-list" aria-live="polite"></div>
+      </section>
+    </main>
+  </div>
+
+  <div class="overlay" id="form-overlay" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="form-title">
+      <header class="dialog-head"><div><h2 id="form-title">Report a bug</h2><p>Capture the details so it can be reproduced.</p></div><button class="close-button" type="button" data-close="form-overlay" aria-label="Close">×</button></header>
+      <form class="form" id="report-form">
+        <div class="form-grid">
+          <div class="field full"><label for="report-title">Title</label><input id="report-title" name="title" maxlength="120" placeholder="A short, specific summary" required></div>
+          <div class="field"><label for="report-severity">Severity</label><select id="report-severity" name="severity"><option>Medium</option><option>Low</option><option>High</option><option>Critical</option></select></div>
+          <div class="field"><label for="report-area">Area <span>optional</span></label><input id="report-area" name="area" maxlength="50" placeholder="e.g. Checkout"></div>
+          <div class="field full"><label for="report-description">Description</label><textarea id="report-description" name="description" placeholder="What happened? Include any useful context." required></textarea></div>
+          <div class="field full"><label for="report-steps">Steps to reproduce <span>optional</span></label><textarea class="compact" id="report-steps" name="steps" placeholder="1. Go to...&#10;2. Select...&#10;3. Observe..."></textarea></div>
+          <div class="field"><label for="report-expected">Expected result <span>optional</span></label><textarea class="compact" id="report-expected" name="expected" placeholder="What should happen?"></textarea></div>
+          <div class="field"><label for="report-actual">Actual result <span>optional</span></label><textarea class="compact" id="report-actual" name="actual" placeholder="What happened instead?"></textarea></div>
+          <div class="field full"><label for="report-environment">Environment <span>optional</span></label><input id="report-environment" name="environment" maxlength="100" placeholder="Browser, device, OS, or app version"></div>
+        </div>
+        <div class="form-footer"><button class="button" type="button" data-close="form-overlay">Cancel</button><button class="button button-primary" type="submit">Save report</button></div>
+      </form>
+    </section>
+  </div>
+
+  <div class="overlay" id="detail-overlay" hidden>
+    <section class="dialog" role="dialog" aria-modal="true" aria-labelledby="detail-title">
+      <header class="dialog-head"><div><p class="eyebrow">Issue details</p></div><button class="close-button" type="button" data-close="detail-overlay" aria-label="Close">×</button></header>
+      <div class="detail-content" id="detail-content"></div>
+    </section>
+  </div>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script>
+    (() => {
+      const STORAGE_KEY = "bugbase-reports-v1";
+      const statuses = ["Open", "In progress", "Resolved"];
+      const list = document.querySelector("#report-list");
+      const formOverlay = document.querySelector("#form-overlay");
+      const detailOverlay = document.querySelector("#detail-overlay");
+      const form = document.querySelector("#report-form");
+      let activeStatus = "all";
+      let reports = loadReports();
+      let toastTimer;
+
+      function loadReports() {
+        try {
+          const stored = JSON.parse(localStorage.getItem(STORAGE_KEY));
+          return Array.isArray(stored) ? stored : [];
+        } catch {
+          return [];
+        }
+      }
+
+      function saveReports() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
+        } catch {
+          showToast("Could not save. Browser storage may be full or unavailable.");
+        }
+      }
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
+      }
+
+      function slug(value) {
+        return value.toLowerCase().replaceAll(" ", "-");
+      }
+
+      function formatDate(value) {
+        return new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(new Date(value));
+      }
+
+      function visibleReports() {
+        const query = document.querySelector("#search-input").value.trim().toLowerCase();
+        const severity = document.querySelector("#severity-filter").value;
+        return reports.filter((report) => {
+          const matchesStatus = activeStatus === "all" || report.status === activeStatus;
+          const matchesSeverity = severity === "all" || report.severity === severity;
+          const searchable = [report.id, report.title, report.area, report.description].join(" ").toLowerCase();
+          return matchesStatus && matchesSeverity && searchable.includes(query);
+        }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+
+      function render() {
+        const counts = {
+          total: reports.length,
+          open: reports.filter((report) => report.status === "Open").length,
+          progress: reports.filter((report) => report.status === "In progress").length,
+          resolved: reports.filter((report) => report.status === "Resolved").length
+        };
+        document.querySelector("#stat-total").textContent = counts.total;
+        document.querySelector("#stat-open").textContent = counts.open;
+        document.querySelector("#stat-progress").textContent = counts.progress;
+        document.querySelector("#stat-resolved").textContent = counts.resolved;
+        document.querySelector("#nav-all").textContent = counts.total;
+        document.querySelector("#nav-open").textContent = counts.open;
+        document.querySelector("#nav-progress").textContent = counts.progress;
+        document.querySelector("#nav-resolved").textContent = counts.resolved;
+
+        const filtered = visibleReports();
+        document.querySelector("#report-heading").textContent = activeStatus === "all" ? "All reports" : activeStatus;
+        document.querySelector("#result-count").textContent = `${filtered.length} ${filtered.length === 1 ? "issue" : "issues"}`;
+        if (filtered.length === 0) {
+          const isEmptyWorkspace = reports.length === 0;
+          list.innerHTML = `<div class="empty"><div class="empty-symbol" aria-hidden="true">${isEmptyWorkspace ? "+" : "⌕"}</div><h3>${isEmptyWorkspace ? "No reports yet" : "No matching reports"}</h3><p>${isEmptyWorkspace ? "Create your first report to get started." : "Try changing your search or filters."}</p></div>`;
+          return;
+        }
+        list.innerHTML = filtered.map((report) => `
+          <button class="report-row" type="button" data-report-id="${escapeHTML(report.id)}" aria-label="Open ${escapeHTML(report.title)}">
+            <span><span class="report-title">${escapeHTML(report.title)}</span><span class="report-meta">${escapeHTML(report.id)}${report.area ? ` · ${escapeHTML(report.area)}` : ""}</span></span>
+            <span><span class="severity severity-${slug(report.severity)}">${escapeHTML(report.severity)}</span></span>
+            <span><span class="status status-${slug(report.status)}">${escapeHTML(report.status)}</span></span>
+            <span class="report-date">${escapeHTML(formatDate(report.createdAt))}</span>
+          </button>`).join("");
+      }
+
+      function showToast(message) {
+        const toast = document.querySelector("#toast");
+        toast.textContent = message;
+        toast.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { toast.hidden = true; }, 2600);
+      }
+
+      function openOverlay(overlay) {
+        overlay.hidden = false;
+        document.body.style.overflow = "hidden";
+        const focusTarget = overlay.querySelector("input, button, select, textarea");
+        if (focusTarget) focusTarget.focus();
+      }
+
+      function closeOverlay(overlay) {
+        overlay.hidden = true;
+        document.body.style.overflow = "";
+      }
+
+      function showDetails(id) {
+        const report = reports.find((item) => item.id === id);
+        if (!report) return;
+        const detail = document.querySelector("#detail-content");
+        const blocks = [
+          ["Description", report.description],
+          ["Steps to reproduce", report.steps],
+          ["Expected result", report.expected],
+          ["Actual result", report.actual],
+          ["Environment", report.environment]
+        ].filter(([, value]) => value);
+        detail.innerHTML = `
+          <h2 class="detail-title" id="detail-title">${escapeHTML(report.title)}</h2>
+          <div class="detail-badges"><span class="severity severity-${slug(report.severity)}">${escapeHTML(report.severity)}</span><span class="status status-${slug(report.status)}">${escapeHTML(report.status)}</span><span class="report-meta">${escapeHTML(report.id)}${report.area ? ` · ${escapeHTML(report.area)}` : ""} · ${escapeHTML(formatDate(report.createdAt))}</span></div>
+          ${blocks.map(([heading, value]) => `<section class="detail-block"><h3>${escapeHTML(heading)}</h3><p>${escapeHTML(value)}</p></section>`).join("")}
+          <div class="detail-controls"><label for="detail-status">Status<select id="detail-status" data-report-id="${escapeHTML(report.id)}">${statuses.map((status) => `<option${status === report.status ? " selected" : ""}>${status}</option>`).join("")}</select></label><button class="button button-danger" id="delete-report" type="button" data-report-id="${escapeHTML(report.id)}">Delete report</button></div>`;
+        openOverlay(detailOverlay);
+      }
+
+      document.querySelector("#new-report-button").addEventListener("click", () => openOverlay(formOverlay));
+      document.querySelectorAll("[data-close]").forEach((button) => {
+        button.addEventListener("click", () => closeOverlay(document.getElementById(button.dataset.close)));
+      });
+      [formOverlay, detailOverlay].forEach((overlay) => {
+        overlay.addEventListener("click", (event) => {
+          if (event.target === overlay) closeOverlay(overlay);
+        });
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+          closeOverlay(formOverlay);
+          closeOverlay(detailOverlay);
+        }
+      });
+      document.querySelectorAll(".nav-button").forEach((button) => {
+        button.addEventListener("click", () => {
+          activeStatus = button.dataset.status;
+          document.querySelectorAll(".nav-button").forEach((item) => item.classList.toggle("active", item === button));
+          render();
+        });
+      });
+      document.querySelector("#search-input").addEventListener("input", render);
+      document.querySelector("#severity-filter").addEventListener("change", render);
+      list.addEventListener("click", (event) => {
+        const row = event.target.closest("[data-report-id]");
+        if (row) showDetails(row.dataset.reportId);
+      });
+      document.querySelector("#detail-content").addEventListener("change", (event) => {
+        if (event.target.id !== "detail-status") return;
+        const report = reports.find((item) => item.id === event.target.dataset.reportId);
+        if (!report) return;
+        report.status = event.target.value;
+        saveReports();
+        render();
+        showDetails(report.id);
+        showToast("Status updated");
+      });
+      document.querySelector("#detail-content").addEventListener("click", (event) => {
+        if (event.target.id !== "delete-report") return;
+        reports = reports.filter((report) => report.id !== event.target.dataset.reportId);
+        saveReports();
+        closeOverlay(detailOverlay);
+        render();
+        showToast("Report deleted");
+      });
+      form.addEventListener("submit", (event) => {
+        event.preventDefault();
+        const fields = new FormData(form);
+        const highestId = reports.reduce((highest, report) => Math.max(highest, Number(report.id.split("-")[1]) || 0), 100);
+        reports.unshift({
+          id: `BUG-${highestId + 1}`,
+          title: fields.get("title").trim(),
+          severity: fields.get("severity"),
+          status: "Open",
+          area: fields.get("area").trim(),
+          description: fields.get("description").trim(),
+          steps: fields.get("steps").trim(),
+          expected: fields.get("expected").trim(),
+          actual: fields.get("actual").trim(),
+          environment: fields.get("environment").trim(),
+          createdAt: new Date().toISOString()
+        });
+        saveReports();
+        form.reset();
+        closeOverlay(formOverlay);
+        activeStatus = "all";
+        document.querySelector("#search-input").value = "";
+        document.querySelector("#severity-filter").value = "all";
+        document.querySelectorAll(".nav-button").forEach((button) => button.classList.toggle("active", button.dataset.status === "all"));
+        render();
+        showToast("Report saved on this device");
+      });
+      document.querySelector("#export-button").addEventListener("click", () => {
+        const data = new Blob([JSON.stringify(reports, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(data);
+        const link = document.createElement("a");
+        link.href = url;
+        link.download = `bugbase-reports-${new Date().toISOString().slice(0, 10)}.json`;
+        link.click();
+        URL.revokeObjectURL(url);
+        showToast("JSON export downloaded");
+      });
+
+      render();
+    })();
+  </script>
+</body>
+</html>
