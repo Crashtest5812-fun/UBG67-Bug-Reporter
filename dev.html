@@ -1,0 +1,306 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f6f7f2">
+  <title>Developer Portal — UBG67 Support</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { color-scheme: light; --paper: #f6f7f2; --white: #fff; --ink: #202721; --muted: #788078; --line: #e6e9e1; --green: #275b48; --green-soft: #e7f0e9; --red: #d65b43; --red-soft: #fae9e4; --yellow: #e5ba57; --yellow-soft: #f7f0dc; --blue: #577998; --blue-soft: #e9eff4; font-family: "Manrope", sans-serif; font-synthesis: none; text-rendering: optimizeLegibility; }
+    * { box-sizing: border-box; }
+    body { min-width: 320px; min-height: 100vh; margin: 0; color: var(--ink); background: radial-gradient(ellipse at 87% 35%, rgb(228 237 222 / 65%), transparent 31%), var(--paper); }
+    a { color: inherit; }
+    button, input, select { font: inherit; }
+    :focus-visible { outline: 3px solid rgb(39 91 72 / 28%); outline-offset: 3px; }
+    .header { max-width: 1160px; display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: auto; padding: 23px 30px; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 15px; font-weight: 800; }
+    .brand-mark { width: 30px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: var(--green); color: white; font-size: 15px; }
+    .brand span { color: var(--green); }
+    .nav { display: flex; align-items: center; gap: 20px; }
+    .nav a { color: #626b63; font-size: 11px; font-weight: 700; text-decoration: none; }
+    .nav a:hover, .nav a[aria-current="page"] { color: var(--green); }
+    main { max-width: 1040px; margin: 0 auto; padding: 54px 30px 72px; }
+    .intro { margin-bottom: 25px; }
+    .eyebrow { margin: 0 0 12px; color: var(--green); font: 10px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+    h1 { margin: 0; font-size: clamp(32px, 4vw, 46px); line-height: 1.1; letter-spacing: 0; }
+    .lede { max-width: 650px; margin: 13px 0 0; color: #626b63; font-size: 12px; line-height: 1.75; }
+    .panel { padding: clamp(19px, 4vw, 29px); border: 1px solid var(--line); border-radius: 7px; background: var(--white); box-shadow: 0 18px 50px rgb(26 39 29 / 7%); }
+    .auth-panel { max-width: 500px; }
+    .auth-panel[hidden], .dashboard[hidden] { display: none; }
+    .panel h2 { margin: 0 0 8px; font-size: 17px; }
+    .panel-copy { margin: 0 0 20px; color: var(--muted); font-size: 11px; line-height: 1.65; }
+    .field { display: grid; gap: 7px; margin-bottom: 14px; }
+    label { color: #4e574f; font-size: 10px; font-weight: 800; }
+    input, select { width: 100%; min-height: 40px; padding: 9px 11px; border: 1px solid var(--line); border-radius: 4px; background: #fcfdfa; color: var(--ink); font-size: 11px; }
+    .submit, .button { min-height: 39px; display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 0 14px; border: 1px solid var(--line); border-radius: 4px; background: white; color: var(--ink); cursor: pointer; font-size: 10px; font-weight: 800; text-decoration: none; }
+    .submit { border-color: var(--green); background: var(--green); color: white; }
+    .submit:hover { background: #1d4938; }
+    .button:hover { background: #f4f6f1; }
+    .error { min-height: 16px; margin: 12px 0 0; color: #a63f2e; font-size: 10px; }
+    .security-note { max-width: 500px; margin: 14px 0 0; color: #818981; font-size: 9px; line-height: 1.65; }
+    .dash-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 14px; margin: 0 0 20px; }
+    .dash-head h2 { margin: 0; font-size: 16px; }
+    .dash-actions { display: flex; align-items: center; gap: 8px; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin-bottom: 24px; border: 1px solid var(--line); border-radius: 6px; background: var(--white); }
+    .stat { min-width: 0; padding: 14px 17px; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat-label { display: block; margin-bottom: 8px; color: var(--muted); font: 9px "DM Mono", monospace; text-transform: uppercase; }
+    .stat-value { display: flex; align-items: center; gap: 7px; font-size: 21px; font-weight: 800; line-height: 1; }
+    .stat-mark { width: 7px; height: 7px; border-radius: 50%; background: var(--green); }
+    .stat:nth-child(2) .stat-mark { background: var(--red); }
+    .stat:nth-child(3) .stat-mark { background: var(--blue); }
+    .stat:nth-child(4) .stat-mark { background: var(--yellow); }
+    .list-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding-bottom: 12px; border-bottom: 1px solid var(--line); }
+    .list-title { display: flex; align-items: baseline; gap: 9px; }
+    .list-title h2 { margin: 0; font-size: 14px; }
+    .count { color: var(--muted); font: 10px "DM Mono", monospace; }
+    .filters { display: flex; gap: 8px; }
+    .search { width: min(250px, 28vw); }
+    .filter { width: auto; min-width: 142px; }
+    .issue-list { display: grid; }
+    .issue { padding: 16px 3px; border-bottom: 1px solid var(--line); }
+    .issue-top { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: start; gap: 10px 18px; }
+    .issue-title { margin: 0; font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }
+    .issue-meta { display: flex; flex-wrap: wrap; gap: 8px 13px; margin-top: 6px; color: var(--muted); font: 9px "DM Mono", monospace; }
+    .badge { width: fit-content; display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 4px; font: 9px "DM Mono", monospace; white-space: nowrap; }
+    .severity-critical { color: #a63f2e; background: var(--red-soft); }
+    .severity-high { color: #a45b25; background: #f8ecdf; }
+    .severity-medium { color: #866a20; background: var(--yellow-soft); }
+    .severity-low { color: #4d755b; background: var(--green-soft); }
+    .issue-status { width: auto; min-height: 32px; padding: 6px 25px 6px 9px; font: 10px "DM Mono", monospace; }
+    .issue-description { margin: 11px 0 0; color: #4f584f; font-size: 11px; line-height: 1.7; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .issue-details { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 22px; margin-top: 13px; padding-top: 12px; border-top: 1px solid var(--line); }
+    .issue-details h3 { margin: 0 0 5px; color: var(--muted); font: 9px "DM Mono", monospace; text-transform: uppercase; }
+    .issue-details p { margin: 0; color: #4f584f; font-size: 10px; line-height: 1.65; white-space: pre-wrap; overflow-wrap: anywhere; }
+    .empty { padding: 55px 20px; text-align: center; color: var(--muted); font-size: 11px; }
+    .toast { position: fixed; right: 20px; bottom: 20px; padding: 11px 14px; border-radius: 5px; background: #25372b; color: white; box-shadow: 0 18px 50px rgb(26 39 29 / 14%); font-size: 10px; }
+    .toast[hidden] { display: none; }
+    footer { max-width: 1040px; margin: 0 auto; padding: 14px 30px 22px; color: #7d867d; font: 9px "DM Mono", monospace; }
+    @media (max-width: 650px) { .header { align-items: flex-start; flex-direction: column; gap: 13px; padding: 18px 20px; } .nav { width: 100%; justify-content: space-between; gap: 10px; } .nav a { font-size: 10px; } main { padding: 42px 18px 55px; } footer { padding-right: 18px; padding-left: 18px; } .stats { grid-template-columns: 1fr 1fr; } .stat:nth-child(2) { border-right: 0; } .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); } .list-toolbar { align-items: flex-start; flex-direction: column; } .filters { width: 100%; } .search { flex: 1; width: auto; } .issue-top { grid-template-columns: minmax(0, 1fr); } .issue-status { justify-self: start; } }
+    @media (max-width: 430px) { .dash-head { align-items: flex-start; flex-direction: column; } .issue-details { grid-template-columns: 1fr; } .nav a { font-size: 9px; } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+  </style>
+</head>
+<body>
+  <header class="header">
+    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">U</span><span>UBG67 <span>Support</span></span></a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="index.html">Report a bug</a>
+      <a href="subscribe.html">Subscribe</a>
+      <a href="beta.html">Beta program</a>
+    </nav>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">UBG67 / Developer access</p>
+      <h1>Developer portal</h1>
+      <p class="lede">Review incoming reports, follow up on reproduction details, and update the status as work progresses.</p>
+    </section>
+
+    <section class="panel auth-panel" id="auth-panel" aria-labelledby="auth-title">
+      <h2 id="auth-title">Set a portal password</h2>
+      <p class="panel-copy" id="auth-copy">Create a password for this browser to continue. Use at least 10 characters.</p>
+      <form id="auth-form">
+        <div class="field"><label for="password" id="password-label">Create password</label><input id="password" name="password" type="password" autocomplete="current-password" minlength="10" required></div>
+        <div class="field" id="confirm-field"><label for="confirm-password">Confirm password</label><input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="10" required></div>
+        <button class="submit" id="auth-submit" type="submit">Set password</button>
+        <p class="error" id="auth-error" role="alert" aria-live="polite"></p>
+      </form>
+      <p class="security-note">Prototype limitation: this browser-only password gate is not server authentication. Anyone with access to the site files or this browser’s storage can bypass it. Do not use it to protect production or sensitive reports.</p>
+    </section>
+
+    <section class="dashboard" id="dashboard" hidden aria-label="Developer report dashboard">
+      <div class="dash-head"><div><p class="eyebrow">Triage queue</p><h2>Bug reports</h2></div><div class="dash-actions"><button class="button" id="logout" type="button">Log out</button></div></div>
+      <div class="stats" aria-label="Report counts">
+        <div class="stat"><span class="stat-label">Total</span><span class="stat-value"><i class="stat-mark"></i><span id="count-total">0</span></span></div>
+        <div class="stat"><span class="stat-label">Open</span><span class="stat-value"><i class="stat-mark"></i><span id="count-open">0</span></span></div>
+        <div class="stat"><span class="stat-label">In development</span><span class="stat-value"><i class="stat-mark"></i><span id="count-development">0</span></span></div>
+        <div class="stat"><span class="stat-label">Resolved</span><span class="stat-value"><i class="stat-mark"></i><span id="count-resolved">0</span></span></div>
+      </div>
+      <div class="list-toolbar">
+        <div class="list-title"><h2>Reports</h2><span class="count" id="result-count">0 issues</span></div>
+        <div class="filters"><input class="search" id="search" type="search" placeholder="Search reports" aria-label="Search reports"><select class="filter" id="status-filter" aria-label="Filter by status"><option value="all">All statuses</option><option>Open</option><option>In development</option><option>Resolved</option></select></div>
+      </div>
+      <div class="issue-list" id="issue-list" aria-live="polite"></div>
+    </section>
+  </main>
+  <footer>UBG67 SUPPORT <span aria-hidden="true">·</span> DEVELOPER PORTAL</footer>
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script>
+    (() => {
+      const REPORTS_KEY = "bugbase-reports-v1";
+      const PASSWORD_KEY = "ubg67-dev-password-v1";
+      const SESSION_KEY = "ubg67-dev-session";
+      const statuses = ["Open", "In development", "Resolved"];
+      const authForm = document.querySelector("#auth-form");
+      const authPanel = document.querySelector("#auth-panel");
+      const dashboard = document.querySelector("#dashboard");
+      let reports = [];
+      let toastTimer;
+
+      function escapeHTML(value) {
+        return String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
+      }
+
+      function readReports() {
+        const stored = JSON.parse(localStorage.getItem(REPORTS_KEY) || "[]");
+        if (!Array.isArray(stored)) throw new Error("Invalid report storage");
+        return stored.map((report) => report.status === "In progress" ? { ...report, status: "In development" } : report);
+      }
+
+      function setAuthMode(isSetup) {
+        document.querySelector("#auth-title").textContent = isSetup ? "Set a portal password" : "Developer sign in";
+        document.querySelector("#auth-copy").textContent = isSetup ? "Create a password for this browser to continue. Use at least 10 characters." : "Enter the password set for this browser.";
+        document.querySelector("#password-label").textContent = isSetup ? "Create password" : "Portal password";
+        document.querySelector("#confirm-field").hidden = !isSetup;
+        document.querySelector("#confirm-password").required = isSetup;
+        document.querySelector("#auth-submit").textContent = isSetup ? "Set password" : "Unlock portal";
+      }
+
+      function showDashboard() {
+        try {
+          reports = readReports();
+          localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+          authPanel.hidden = true;
+          dashboard.hidden = false;
+          render();
+        } catch {
+          showAuthError("Could not read reports from this browser. Check storage access and try again.");
+        }
+      }
+
+      function showAuthError(message) {
+        const error = document.querySelector("#auth-error");
+        error.textContent = message;
+      }
+
+      function showToast(message) {
+        const toast = document.querySelector("#toast");
+        toast.textContent = message;
+        toast.hidden = false;
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => { toast.hidden = true; }, 2200);
+      }
+
+      function formatDate(value) {
+        const date = new Date(value);
+        return Number.isNaN(date.getTime()) ? "Unknown date" : new Intl.DateTimeFormat(undefined, { month: "short", day: "numeric", year: "numeric" }).format(date);
+      }
+
+      function filteredReports() {
+        const query = document.querySelector("#search").value.trim().toLowerCase();
+        const status = document.querySelector("#status-filter").value;
+        return reports.filter((report) => {
+          const matchesStatus = status === "all" || report.status === status;
+          const content = [report.id, report.title, report.area, report.description, report.reporter, report.email].join(" ").toLowerCase();
+          return matchesStatus && content.includes(query);
+        }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+      }
+
+      function render() {
+        const counts = {
+          total: reports.length,
+          open: reports.filter((report) => report.status === "Open").length,
+          development: reports.filter((report) => report.status === "In development").length,
+          resolved: reports.filter((report) => report.status === "Resolved").length
+        };
+        document.querySelector("#count-total").textContent = counts.total;
+        document.querySelector("#count-open").textContent = counts.open;
+        document.querySelector("#count-development").textContent = counts.development;
+        document.querySelector("#count-resolved").textContent = counts.resolved;
+
+        const visible = filteredReports();
+        document.querySelector("#result-count").textContent = `${visible.length} ${visible.length === 1 ? "issue" : "issues"}`;
+        if (visible.length === 0) {
+          document.querySelector("#issue-list").innerHTML = `<div class="empty">${reports.length ? "No reports match your filters." : "No bug reports yet."}</div>`;
+          return;
+        }
+        document.querySelector("#issue-list").innerHTML = visible.map((report) => {
+          const details = [
+            ["Steps to reproduce", report.steps],
+            ["Expected result", report.expected],
+            ["Actual result", report.actual],
+            ["Environment", report.environment]
+          ].filter(([, value]) => value);
+          const stateOptions = statuses.map((status) => `<option${report.status === status ? " selected" : ""}>${status}</option>`).join("");
+          return `<article class="issue">
+            <div class="issue-top">
+              <div><h3 class="issue-title">${escapeHTML(report.title)}</h3><div class="issue-meta"><span>${escapeHTML(report.id)}</span><span>${escapeHTML(report.area || "General")}</span><span>${escapeHTML(report.reporter || "Anonymous")}</span><span>${escapeHTML(report.email || "No email")}</span><span>${escapeHTML(formatDate(report.createdAt))}</span></div></div>
+              <select class="issue-status" data-report-id="${escapeHTML(report.id)}" aria-label="Update status for ${escapeHTML(report.id)}">${stateOptions}</select>
+            </div>
+            <span class="badge severity-${escapeHTML(String(report.severity || "medium").toLowerCase())}">${escapeHTML(report.severity || "Medium")} impact</span>
+            <p class="issue-description">${escapeHTML(report.description)}</p>
+            ${details.length ? `<div class="issue-details">${details.map(([title, value]) => `<section><h3>${escapeHTML(title)}</h3><p>${escapeHTML(value)}</p></section>`).join("")}</div>` : ""}
+          </article>`;
+        }).join("");
+      }
+
+      async function hashPassword(password, saltText) {
+        if (!window.crypto?.subtle) throw new Error("Secure password hashing is unavailable in this browser. Open the site on localhost or HTTPS.");
+        const salt = Uint8Array.from(atob(saltText), (character) => character.charCodeAt(0));
+        const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
+        const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt, iterations: 210000, hash: "SHA-256" }, material, 256);
+        return Array.from(new Uint8Array(bits), (byte) => byte.toString(16).padStart(2, "0")).join("");
+      }
+
+      authForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
+        const password = document.querySelector("#password").value;
+        const confirmPassword = document.querySelector("#confirm-password").value;
+        const saved = localStorage.getItem(PASSWORD_KEY);
+        const isSetup = !saved;
+        showAuthError("");
+        try {
+          if (isSetup) {
+            if (password.length < 10) throw new Error("Use at least 10 characters for your password.");
+            if (password !== confirmPassword) throw new Error("The passwords do not match.");
+            const salt = crypto.getRandomValues(new Uint8Array(16));
+            const saltText = btoa(String.fromCharCode(...salt));
+            const hash = await hashPassword(password, saltText);
+            localStorage.setItem(PASSWORD_KEY, JSON.stringify({ salt: saltText, hash }));
+          } else {
+            const credential = JSON.parse(saved);
+            const hash = await hashPassword(password, credential.salt);
+            if (hash !== credential.hash) throw new Error("That password didn’t match. Try again.");
+          }
+          sessionStorage.setItem(SESSION_KEY, "unlocked");
+          showDashboard();
+        } catch (error) {
+          showAuthError(error.message || "Could not unlock the developer portal.");
+        }
+      });
+
+      document.querySelector("#logout").addEventListener("click", () => {
+        sessionStorage.removeItem(SESSION_KEY);
+        dashboard.hidden = true;
+        authPanel.hidden = false;
+        authForm.reset();
+        setAuthMode(false);
+        document.querySelector("#password").focus();
+      });
+      document.querySelector("#search").addEventListener("input", render);
+      document.querySelector("#status-filter").addEventListener("change", render);
+      document.querySelector("#issue-list").addEventListener("change", (event) => {
+        if (!event.target.matches(".issue-status")) return;
+        const report = reports.find((item) => item.id === event.target.dataset.reportId);
+        if (!report) return;
+        report.status = event.target.value;
+        try {
+          localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+          render();
+          showToast(`${report.id} marked ${report.status.toLowerCase()}`);
+        } catch {
+          showAuthError("Could not save the status change to browser storage.");
+        }
+      });
+
+      const isSetup = !localStorage.getItem(PASSWORD_KEY);
+      setAuthMode(isSetup);
+      if (sessionStorage.getItem(SESSION_KEY) === "unlocked" && !isSetup) showDashboard();
+    })();
+  </script>
+</body>
+</html>
