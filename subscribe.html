@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f7f2">
-  <title>Subscribe to UBG67 — UBG67 Support</title>
+  <title>UBG67 | Games Site Updates</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -52,6 +52,7 @@
     @media (max-width: 430px) { .header { align-items: flex-start; flex-direction: column; gap: 14px; } .nav { width: 100%; justify-content: space-between; } .nav .nav-cta { padding: 7px 8px; } .dispatches { margin-top: 27px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
   </style>
+  <link rel="stylesheet" href="site-theme.css">
 </head>
 <body>
   <header class="header">
@@ -65,31 +66,31 @@
   </header>
   <main>
     <section>
-      <p class="eyebrow">A note from UBG67</p>
-      <h1>Subscribe to UBG67.</h1>
-      <p class="lede">Product updates, useful release notes, and the occasional invitation to try something new. Thoughtful mail, only when there’s something worth sharing.</p>
-      <div class="dispatches" aria-label="Newsletter topics">
-        <div class="dispatch"><small>01 / Product</small><strong>What’s new</strong></div>
-        <div class="dispatch"><small>02 / People</small><strong>Stories from the community</strong></div>
+      <p class="eyebrow">Updates from UBG67</p>
+      <h1>Keep up with the games site.</h1>
+      <p class="lede">Get occasional notes about new game listings, site improvements, and changes that affect playing on UBG67.</p>
+      <div class="dispatches" aria-label="Update topics">
+        <div class="dispatch"><small>01 / Games</small><strong>New listings</strong></div>
+        <div class="dispatch"><small>02 / Site</small><strong>Changes and fixes</strong></div>
       </div>
     </section>
     <section class="form-panel" aria-labelledby="form-title">
       <div id="form-state">
-        <h2 id="form-title">Get the next update</h2>
-        <p>Leave your email and we’ll keep you in the loop.</p>
+        <h2 id="form-title">Get UBG67 updates</h2>
+        <p>One occasional email when there’s something useful to share.</p>
         <form id="subscribe-form">
           <div class="field"><label for="name">Your name <span>(optional)</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="How should we address you?"></div>
           <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></div>
-          <label class="consent"><input name="consent" type="checkbox" required><span>I agree to receive occasional email updates from UBG67.</span></label>
+          <label class="consent"><input name="consent" type="checkbox" required><span>I agree to receive occasional UBG67 games-site updates.</span></label>
           <button class="submit" type="submit">Subscribe <span aria-hidden="true">→</span></button>
           <p class="privacy">Prototype form: your signup is saved only in this browser and is not sent to a mailing list.</p>
         </form>
       </div>
-      <div class="success" id="success-state" role="status" hidden><div class="success-mark" aria-hidden="true">✓</div><h2>You’re on the list.</h2><p>Your signup has been saved in this browser. The form is a prototype, so no email has been sent.</p></div>
+      <div class="success" id="success-state" role="status" hidden><div class="success-mark" aria-hidden="true">✓</div><h2>You’re on the UBG67 update list.</h2><p>Your signup has been saved in this browser. The form is a prototype, so no email has been sent.</p></div>
       <p class="privacy" id="form-error" role="alert" hidden></p>
     </section>
   </main>
-  <footer>UBG67 SUPPORT <span aria-hidden="true">·</span> BUILT FOR THE COMMUNITY</footer>
+  <footer>UBG67 GAMES SITE <span aria-hidden="true">·</span> UPDATES</footer>
   <script>
     (() => {
       const form = document.querySelector("#subscribe-form");

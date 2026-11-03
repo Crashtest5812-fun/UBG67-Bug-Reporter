@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f7f2">
-  <title>Developer Portal — UBG67 Support</title>
+  <title>Game Site Tracker — UBG67 Support</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -66,6 +66,7 @@
     .issue-title { margin: 0; font-size: 12px; line-height: 1.55; overflow-wrap: anywhere; }
     .issue-meta { display: flex; flex-wrap: wrap; gap: 8px 13px; margin-top: 6px; color: var(--muted); font: 9px "DM Mono", monospace; }
     .badge { width: fit-content; display: inline-flex; align-items: center; gap: 6px; padding: 5px 8px; border-radius: 4px; font: 9px "DM Mono", monospace; white-space: nowrap; }
+    .category-badge { margin-top: 10px; color: var(--green); background: var(--green-soft); }
     .severity-critical { color: #a63f2e; background: var(--red-soft); }
     .severity-high { color: #a45b25; background: #f8ecdf; }
     .severity-medium { color: #866a20; background: var(--yellow-soft); }
@@ -83,6 +84,7 @@
     @media (max-width: 430px) { .dash-head { align-items: flex-start; flex-direction: column; } .issue-details { grid-template-columns: 1fr; } .nav a { font-size: 9px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
   </style>
+  <link rel="stylesheet" href="site-theme.css">
 </head>
 <body>
   <header class="header">
@@ -95,9 +97,9 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">UBG67 / Developer access</p>
-      <h1>Developer portal</h1>
-      <p class="lede">Review incoming reports, follow up on reproduction details, and update the status as work progresses.</p>
+      <p class="eyebrow">UBG67 / Site operations</p>
+      <h1>Games site tracker</h1>
+      <p class="lede">Triage game launch, listing, controls, performance, and browser compatibility issues across UBG67.</p>
     </section>
 
     <section class="panel auth-panel" id="auth-panel" aria-labelledby="auth-title">
@@ -113,7 +115,7 @@
     </section>
 
     <section class="dashboard" id="dashboard" hidden aria-label="Developer report dashboard">
-      <div class="dash-head"><div><p class="eyebrow">Triage queue</p><h2>Bug reports</h2></div><div class="dash-actions"><button class="button" id="logout" type="button">Log out</button></div></div>
+      <div class="dash-head"><div><p class="eyebrow">Triage queue</p><h2>Game &amp; site reports</h2></div><div class="dash-actions"><button class="button" id="logout" type="button">Log out</button></div></div>
       <div class="stats" aria-label="Report counts">
         <div class="stat"><span class="stat-label">Total</span><span class="stat-value"><i class="stat-mark"></i><span id="count-total">0</span></span></div>
         <div class="stat"><span class="stat-label">Open</span><span class="stat-value"><i class="stat-mark"></i><span id="count-open">0</span></span></div>
@@ -195,7 +197,7 @@
         const status = document.querySelector("#status-filter").value;
         return reports.filter((report) => {
           const matchesStatus = status === "all" || report.status === status;
-          const content = [report.id, report.title, report.area, report.description, report.reporter, report.email].join(" ").toLowerCase();
+          const content = [report.id, report.title, report.category, report.gameTitle, report.pageUrl, report.area, report.description, report.reporter, report.email].join(" ").toLowerCase();
           return matchesStatus && content.includes(query);
         }).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
       }
@@ -220,6 +222,9 @@
         }
         document.querySelector("#issue-list").innerHTML = visible.map((report) => {
           const details = [
+            ["Game", report.gameTitle],
+            ["Game or page URL", report.pageUrl],
+            ["Issue type", report.category],
             ["Steps to reproduce", report.steps],
             ["Expected result", report.expected],
             ["Actual result", report.actual],
@@ -228,10 +233,10 @@
           const stateOptions = statuses.map((status) => `<option${report.status === status ? " selected" : ""}>${status}</option>`).join("");
           return `<article class="issue">
             <div class="issue-top">
-              <div><h3 class="issue-title">${escapeHTML(report.title)}</h3><div class="issue-meta"><span>${escapeHTML(report.id)}</span><span>${escapeHTML(report.area || "General")}</span><span>${escapeHTML(report.reporter || "Anonymous")}</span><span>${escapeHTML(report.email || "No email")}</span><span>${escapeHTML(formatDate(report.createdAt))}</span></div></div>
+              <div><h3 class="issue-title">${escapeHTML(report.title)}</h3><div class="issue-meta"><span>${escapeHTML(report.id)}</span><span>${escapeHTML(report.category || "General issue")}</span><span>${escapeHTML(report.gameTitle || report.area || "Site-wide")}</span><span>${escapeHTML(report.reporter || "Anonymous")}</span><span>${escapeHTML(report.email || "No email")}</span><span>${escapeHTML(formatDate(report.createdAt))}</span></div></div>
               <select class="issue-status" data-report-id="${escapeHTML(report.id)}" aria-label="Update status for ${escapeHTML(report.id)}">${stateOptions}</select>
             </div>
-            <span class="badge severity-${escapeHTML(String(report.severity || "medium").toLowerCase())}">${escapeHTML(report.severity || "Medium")} impact</span>
+            <span class="badge severity-${escapeHTML(String(report.severity || "medium").toLowerCase())}">${escapeHTML(report.severity || "Medium")} impact</span>${report.category ? `<span class="badge category-badge">${escapeHTML(report.category)}</span>` : ""}
             <p class="issue-description">${escapeHTML(report.description)}</p>
             ${details.length ? `<div class="issue-details">${details.map(([title, value]) => `<section><h3>${escapeHTML(title)}</h3><p>${escapeHTML(value)}</p></section>`).join("")}</div>` : ""}
           </article>`;

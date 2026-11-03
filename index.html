@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f7f2">
-  <title>UBG67 Support</title>
+  <meta name="theme-color" content="#183c36">
+  <title>UBG67 Support | Games Site Tracker</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -62,6 +62,7 @@
     @media (max-width: 480px) { .header { align-items: flex-start; flex-direction: column; gap: 14px; } .nav { width: 100%; justify-content: space-between; gap: 8px; } .nav .nav-cta { padding: 7px 8px; } .form-grid { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .actions { align-items: flex-start; flex-direction: column; } footer { align-items: flex-start; flex-direction: column; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
   </style>
+  <link rel="stylesheet" href="site-theme.css">
 </head>
 <body>
   <header class="header">
@@ -74,36 +75,39 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">UBG67 / Support</p>
-      <h1>Something not working?</h1>
-      <p class="lede">Tell us what happened and how to reproduce it. A clear report makes it easier for the UBG67 team to investigate and get it fixed.</p>
+      <p class="eyebrow">UBG67 / Games site support</p>
+      <h1>Something off with a game?</h1>
+      <p class="lede">Report a game that will not launch, a broken listing, or a problem with controls, performance, or the UBG67 site. Include the game name and page so we can track it down.</p>
       <div class="steps" aria-label="What happens next">
-        <div class="step"><small>01 / Report</small><strong>Describe the issue</strong></div>
-        <div class="step"><small>02 / Follow up</small><strong>Track its status</strong></div>
+        <div class="step"><small>01 / Identify</small><strong>Name the game or page</strong></div>
+        <div class="step"><small>02 / Resolve</small><strong>Follow the fix status</strong></div>
       </div>
     </section>
     <section class="form-panel" aria-labelledby="form-title">
       <div id="form-state">
-        <h2 id="form-title">Submit a bug report</h2>
-        <p>Fields marked optional can be left blank.</p>
+        <h2 id="form-title">Report a game or site issue</h2>
+        <p>Share enough detail for the team to reproduce the problem.</p>
         <form id="report-form">
           <div class="form-grid">
-            <div class="field full"><label for="title">What went wrong?</label><input id="title" name="title" type="text" maxlength="120" placeholder="A short summary of the problem" required></div>
+            <div class="field full"><label for="title">Issue summary</label><input id="title" name="title" type="text" maxlength="120" placeholder="e.g. Game page stays blank after launch" required></div>
             <div class="field"><label for="name">Your name <span>(optional)</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="Name"></div>
             <div class="field"><label for="email">Email <span>(optional)</span></label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com"></div>
+            <div class="field"><label for="category">Issue type</label><select id="category" name="category" required><option>Game won't load</option><option>Broken game link</option><option>Controls not working</option><option>Lag or performance</option><option>Display or audio</option><option>Browser compatibility</option><option>Site navigation</option><option>Other</option></select></div>
             <div class="field"><label for="severity">Impact</label><select id="severity" name="severity"><option>Medium</option><option>Low</option><option>High</option><option>Critical</option></select></div>
-            <div class="field"><label for="area">Area <span>(optional)</span></label><input id="area" name="area" type="text" maxlength="50" placeholder="e.g. Account settings"></div>
-            <div class="field full"><label for="description">What happened?</label><textarea id="description" name="description" placeholder="Include what you were doing and what you saw." required></textarea></div>
-            <div class="field full"><label for="steps">Steps to reproduce <span>(optional)</span></label><textarea class="compact" id="steps" name="steps" placeholder="1. Go to...&#10;2. Select...&#10;3. Observe..."></textarea></div>
+            <div class="field"><label for="game-title">Game name <span>(optional)</span></label><input id="game-title" name="gameTitle" type="text" maxlength="100" placeholder="Which game is affected?"></div>
+            <div class="field"><label for="area">Site area <span>(optional)</span></label><input id="area" name="area" type="text" maxlength="50" placeholder="e.g. Search or game page"></div>
+            <div class="field full"><label for="page-url">Game or page URL <span>(optional)</span></label><input id="page-url" name="pageUrl" type="url" maxlength="500" placeholder="Paste the UBG67 page address"></div>
+            <div class="field full"><label for="description">What happened?</label><textarea id="description" name="description" placeholder="What were you trying to play? What did the site or game do?" required></textarea></div>
+            <div class="field full"><label for="steps">Steps to reproduce <span>(optional)</span></label><textarea class="compact" id="steps" name="steps" placeholder="1. Open the game page&#10;2. Select Play&#10;3. Describe what happens"></textarea></div>
             <div class="field"><label for="expected">Expected result <span>(optional)</span></label><textarea class="compact" id="expected" name="expected" placeholder="What should happen?"></textarea></div>
             <div class="field"><label for="actual">Actual result <span>(optional)</span></label><textarea class="compact" id="actual" name="actual" placeholder="What happened instead?"></textarea></div>
-            <div class="field full"><label for="environment">Device or browser <span>(optional)</span></label><input id="environment" name="environment" type="text" maxlength="100" placeholder="e.g. Firefox on Windows 11"></div>
+            <div class="field full"><label for="environment">Device or browser <span>(optional)</span></label><input id="environment" name="environment" type="text" maxlength="100" placeholder="e.g. Chrome on a school Chromebook"></div>
           </div>
           <div class="actions"><button class="submit" type="submit">Send report <span aria-hidden="true">→</span></button><p class="privacy">Prototype: reports are saved in this browser only and are not sent to the UBG67 team.</p></div>
         </form>
       </div>
       <div class="success" id="success-state" role="status" hidden>
-        <div class="success-mark" aria-hidden="true">✓</div><h2>Report saved.</h2>
+        <div class="success-mark" aria-hidden="true">✓</div><h2>Issue logged.</h2>
         <p>Your report is saved in this browser. The prototype does not send it to the UBG67 team.</p>
         <span class="success-id" id="report-id"></span>
         <button class="again" id="another-report" type="button">Submit another report <span aria-hidden="true">→</span></button>
@@ -124,9 +128,12 @@
         const entry = {
           id: "",
           title: values.get("title").trim(),
+          category: values.get("category"),
           severity: values.get("severity"),
           status: "Open",
           area: values.get("area").trim(),
+          gameTitle: values.get("gameTitle").trim(),
+          pageUrl: values.get("pageUrl").trim(),
           description: values.get("description").trim(),
           steps: values.get("steps").trim(),
           expected: values.get("expected").trim(),
