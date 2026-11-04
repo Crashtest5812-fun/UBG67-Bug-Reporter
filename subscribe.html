@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f6f7f2">
+  <meta name="theme-color" content="#f5f5f5">
   <title>UBG67 | Games Site Updates</title>
+  <link rel="icon" type="image/png" href="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -13,7 +14,7 @@
     * { box-sizing: border-box; }
     body { min-width: 320px; min-height: 100vh; margin: 0; color: var(--ink); background: radial-gradient(ellipse at 87% 35%, rgb(228 237 222 / 65%), transparent 31%), var(--paper); }
     a { color: inherit; }
-    button, input { font: inherit; }
+    button, input, select { font: inherit; }
     :focus-visible { outline: 3px solid rgb(39 91 72 / 28%); outline-offset: 3px; }
     .header { max-width: 1160px; display: flex; align-items: center; justify-content: space-between; gap: 20px; margin: auto; padding: 23px 30px; border-bottom: 1px solid var(--line); }
     .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-size: 15px; font-weight: 800; }
@@ -23,7 +24,7 @@
     .nav a { color: #626b63; font-size: 11px; font-weight: 700; text-decoration: none; }
     .nav a:hover, .nav a[aria-current="page"] { color: var(--green); }
     .nav .nav-cta { padding: 9px 12px; border: 1px solid var(--line); border-radius: 4px; background: white; }
-    main { max-width: 1100px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(320px, .75fr); align-items: center; gap: clamp(40px, 8vw, 110px); margin: 0 auto; padding: 90px 30px 100px; }
+    main { max-width: 1100px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(390px, .95fr); align-items: start; gap: clamp(35px, 6vw, 75px); margin: 0 auto; padding: 72px 30px 85px; }
     .eyebrow { margin: 0 0 17px; color: var(--green); font: 10px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
     h1 { max-width: 590px; margin: 0; font-size: clamp(38px, 5vw, 58px); line-height: 1.08; letter-spacing: 0; }
     .lede { max-width: 470px; margin: 20px 0 0; color: #626b63; font-size: 14px; line-height: 1.8; }
@@ -36,9 +37,18 @@
     .form-panel > p { margin: 7px 0 21px; color: var(--muted); font-size: 11px; line-height: 1.65; }
     .field { display: grid; gap: 7px; margin-bottom: 15px; }
     label { color: #4e574f; font-size: 10px; font-weight: 800; }
-    input[type="text"], input[type="email"] { width: 100%; height: 40px; padding: 0 11px; border: 1px solid var(--line); border-radius: 4px; background: #fcfdfa; color: var(--ink); font-size: 11px; }
-    .consent { display: flex; align-items: flex-start; gap: 9px; margin: 17px 0; color: #626b63; font-size: 10px; line-height: 1.6; }
+    input[type="text"], input[type="email"], select { width: 100%; min-height: 40px; padding: 0 11px; border: 1px solid var(--line); border-radius: 4px; background: #fcfdfa; color: var(--ink); font-size: 11px; }
+    .form-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+    .field.full { grid-column: 1 / -1; }
+    .choice-list { display: grid; gap: 9px; margin: 0 0 19px; padding: 0; border: 0; }
+    .choice-list legend { margin-bottom: 11px; color: #4e574f; font-size: 10px; font-weight: 800; }
+    .choice { display: flex; align-items: flex-start; gap: 9px; color: #626b63; font-size: 10px; font-weight: 500; line-height: 1.5; }
+    .choice input, .consent input { flex: 0 0 auto; margin: 2px 0 0; accent-color: var(--green); }
+    .consent { display: flex; align-items: flex-start; gap: 9px; margin: 16px 0 12px; color: #626b63; font-size: 10px; line-height: 1.6; }
     .consent input { margin: 2px 0 0; accent-color: var(--green); }
+    .policy-note { margin: 0 0 16px; padding: 12px; border: 1px solid var(--line); border-radius: 5px; color: #626b63; font-size: 10px; line-height: 1.65; }
+    .policy-note strong { color: var(--ink); }
+    .policy-note a { color: var(--green); text-decoration: underline; text-underline-offset: 2px; }
     .submit { min-height: 42px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px; border: 0; border-radius: 4px; background: var(--green); color: white; cursor: pointer; font-size: 11px; font-weight: 800; }
     .submit:hover { background: #1d4938; }
     .privacy { margin: 12px 0 0 !important; color: #879087 !important; font-size: 9px !important; }
@@ -48,45 +58,62 @@
     .success h2 { margin: 0 0 8px; font-size: 19px; }
     .success p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.7; }
     footer { max-width: 1100px; margin: 0 auto; padding: 15px 30px 22px; color: #7d867d; font: 9px "DM Mono", monospace; }
-    @media (max-width: 700px) { .header { padding: 17px 18px; } .nav { gap: 12px; } .nav a { font-size: 10px; } main { grid-template-columns: 1fr; gap: 33px; padding: 55px 20px 65px; } .form-panel { max-width: 520px; } footer { padding-right: 20px; padding-left: 20px; } }
-    @media (max-width: 430px) { .header { align-items: flex-start; flex-direction: column; gap: 14px; } .nav { width: 100%; justify-content: space-between; } .nav .nav-cta { padding: 7px 8px; } .dispatches { margin-top: 27px; } }
+    @media (max-width: 850px) { main { grid-template-columns: 1fr; gap: 30px; padding: 54px 24px 65px; } .form-panel { max-width: 650px; } }
+    @media (max-width: 700px) { .header { padding: 17px 18px; } .nav { gap: 12px; } .nav a { font-size: 10px; } footer { padding-right: 20px; padding-left: 20px; } }
+    @media (max-width: 430px) { .header { align-items: flex-start; flex-direction: column; gap: 14px; } .nav { width: 100%; justify-content: space-between; } .nav .nav-cta { padding: 7px 8px; } main { padding-right: 18px; padding-left: 18px; } .form-fields { grid-template-columns: 1fr; } .field.full { grid-column: auto; } .dispatches { margin-top: 27px; } }
     @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } }
   </style>
   <link rel="stylesheet" href="site-theme.css">
 </head>
-<body>
+<body class="site-original">
   <header class="header">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">U</span><span>UBG67 <span>Support</span></span></a>
+    <a class="brand" href="index.html"><img class="brand-logo" src="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png" alt=""><span>UBG67 <span>Support</span></span></a>
     <nav class="nav" aria-label="Main navigation">
       <a href="index.html">Report a bug</a>
       <a href="dev.html">Developer portal</a>
       <a href="subscribe.html" aria-current="page">Subscribe</a>
       <a class="nav-cta" href="beta.html">Beta program <span aria-hidden="true">↗</span></a>
+      <button class="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
     </nav>
   </header>
   <main>
     <section>
-      <p class="eyebrow">Updates from UBG67</p>
-      <h1>Keep up with the games site.</h1>
-      <p class="lede">Get occasional notes about new game listings, site improvements, and changes that affect playing on UBG67.</p>
+      <p class="eyebrow">Un-Blocked Games 67 / Player updates</p>
+      <h1>Never miss a new game.</h1>
+      <p class="lede">Tell us what you like to play and choose the updates you care about. Get new game picks, genre highlights, and news about the Un-Blocked Games 67 site.</p>
       <div class="dispatches" aria-label="Update topics">
-        <div class="dispatch"><small>01 / Games</small><strong>New listings</strong></div>
-        <div class="dispatch"><small>02 / Site</small><strong>Changes and fixes</strong></div>
+        <div class="dispatch"><small>01 / Discover</small><strong>Games picked for you</strong></div>
+        <div class="dispatch"><small>02 / Explore</small><strong>New games and features</strong></div>
       </div>
     </section>
     <section class="form-panel" aria-labelledby="form-title">
       <div id="form-state">
-        <h2 id="form-title">Get UBG67 updates</h2>
-        <p>One occasional email when there’s something useful to share.</p>
+        <h2 id="form-title">Choose your game updates</h2>
+        <p>Set your player preferences so updates can focus on the games and news you care about.</p>
         <form id="subscribe-form">
-          <div class="field"><label for="name">Your name <span>(optional)</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="How should we address you?"></div>
-          <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></div>
-          <label class="consent"><input name="consent" type="checkbox" required><span>I agree to receive occasional UBG67 games-site updates.</span></label>
+          <div class="form-fields">
+            <div class="field"><label for="name">Player name <span>(optional)</span></label><input id="name" name="name" type="text" autocomplete="name" maxlength="80" placeholder="How should we address you?"></div>
+            <div class="field"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required></div>
+            <div class="field full"><label for="favorite-genre">Favorite game genre <span>(optional)</span></label><select id="favorite-genre" name="favoriteGenre"><option value="">Choose a genre</option><option>Action and arcade</option><option>Adventure and exploration</option><option>Driving and racing</option><option>Puzzle and strategy</option><option>Sports</option><option>Casual and clicker</option><option>I like discovering all kinds of games</option></select></div>
+            <div class="field full"><label for="favorite-game">A game you enjoy <span>(optional)</span></label><input id="favorite-game" name="favoriteGame" type="text" maxlength="100" placeholder="Tell us a favorite from the site"></div>
+          </div>
+          <fieldset class="choice-list">
+            <legend>What would you like to hear about?</legend>
+            <label class="choice"><input name="interests" type="checkbox" value="new-games" checked><span>New games added to the site</span></label>
+            <label class="choice"><input name="interests" type="checkbox" value="game-picks"><span>Popular games and picks by genre</span></label>
+            <label class="choice"><input name="interests" type="checkbox" value="site-news"><span>Site news, features, and improvements</span></label>
+            <label class="choice"><input name="interests" type="checkbox" value="beta"><span>Beta testing opportunities</span></label>
+          </fieldset>
+          <div class="field"><label for="frequency">Update frequency</label><select id="frequency" name="frequency" required><option value="monthly">Monthly roundup</option><option value="major-updates">Only major updates</option></select></div>
+          <aside class="policy-note" aria-label="Signup terms and privacy">
+            <strong>Terms and privacy:</strong> This signup is a prototype, not a live mailing list. Your choices are saved in this browser only and are not sent to Un-Blocked Games 67. The <a href="https://crashtest5812-fun.github.io/Un-BlockedGames67/">original games site</a> does not currently publish separate newsletter terms or a privacy policy. For questions about the site, <a href="mailto:madcoder19265@outlook.com?subject=Un-Blocked%20Games%2067%20subscription%20question">contact the site team</a>.
+          </aside>
+          <label class="consent"><input name="consent" type="checkbox" required><span>I understand how this prototype uses my information and would like to sign up for the selected Un-Blocked Games 67 updates.</span></label>
           <button class="submit" type="submit">Subscribe <span aria-hidden="true">→</span></button>
-          <p class="privacy">Prototype form: your signup is saved only in this browser and is not sent to a mailing list.</p>
+          <p class="privacy">You can clear this saved prototype signup by clearing this site’s browser storage. Nothing is emailed or shared.</p>
         </form>
       </div>
-      <div class="success" id="success-state" role="status" hidden><div class="success-mark" aria-hidden="true">✓</div><h2>You’re on the UBG67 update list.</h2><p>Your signup has been saved in this browser. The form is a prototype, so no email has been sent.</p></div>
+      <div class="success" id="success-state" role="status" hidden><div class="success-mark" aria-hidden="true">✓</div><h2>Your preferences are saved.</h2><p>This prototype saved your game and update preferences in this browser only. You have not been added to an email list.</p></div>
       <p class="privacy" id="form-error" role="alert" hidden></p>
     </section>
   </main>
@@ -97,7 +124,15 @@
       form.addEventListener("submit", (event) => {
         event.preventDefault();
         const values = new FormData(form);
-        const entry = { name: values.get("name").trim(), email: values.get("email").trim(), createdAt: new Date().toISOString() };
+        const entry = {
+          name: values.get("name").trim(),
+          email: values.get("email").trim(),
+          favoriteGenre: values.get("favoriteGenre"),
+          favoriteGame: values.get("favoriteGame").trim(),
+          interests: values.getAll("interests"),
+          frequency: values.get("frequency"),
+          createdAt: new Date().toISOString()
+        };
         const error = document.querySelector("#form-error");
         try {
           const entries = JSON.parse(localStorage.getItem("ubg67-newsletter-signups") || "[]");
@@ -113,5 +148,6 @@
       });
     })();
   </script>
+  <script src="theme-toggle.js"></script>
 </body>
 </html>

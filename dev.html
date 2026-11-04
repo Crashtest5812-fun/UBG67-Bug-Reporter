@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f7f2">
   <title>Game Site Tracker — UBG67 Support</title>
+  <link rel="icon" type="image/png" href="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -88,11 +89,12 @@
 </head>
 <body>
   <header class="header">
-    <a class="brand" href="index.html"><span class="brand-mark" aria-hidden="true">U</span><span>UBG67 <span>Support</span></span></a>
+    <a class="brand" href="index.html"><img class="brand-logo" src="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png" alt=""><span>UBG67 <span>Support</span></span></a>
     <nav class="nav" aria-label="Main navigation">
       <a href="index.html">Report a bug</a>
       <a href="subscribe.html">Subscribe</a>
       <a href="beta.html">Beta program</a>
+      <button class="theme-toggle" type="button" aria-pressed="false">Dark mode</button>
     </nav>
   </header>
   <main>
@@ -307,5 +309,6 @@
       if (sessionStorage.getItem(SESSION_KEY) === "unlocked" && !isSetup) showDashboard();
     })();
   </script>
+  <script src="theme-toggle.js"></script>
 </body>
 </html>
