@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#f6f7f2">
-  <title>Game Site Tracker — UBG67 Support</title>
-  <link rel="icon" type="image/png" href="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png">
+  <title>Game Site Tracker — Crashtest Support</title>
+  <link rel="icon" type="image/jpeg" href="Assets/Crashtest.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -89,7 +89,7 @@
 </head>
 <body>
   <header class="header">
-    <a class="brand" href="index.html"><img class="brand-logo" src="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png" alt=""><span>UBG67 <span>Support</span></span></a>
+    <a class="brand" href="index.html"><img class="brand-logo" src="Assets/Crashtest.jpg" alt=""><span>Crashtest <span>Support</span></span></a>
     <nav class="nav" aria-label="Main navigation">
       <a href="index.html">Report a bug</a>
       <a href="subscribe.html">Subscribe</a>
@@ -99,25 +99,25 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">UBG67 / Site operations</p>
+      <p class="eyebrow">Crashtest Games / Site operations</p>
       <h1>Games site tracker</h1>
-      <p class="lede">Triage game launch, listing, controls, performance, and browser compatibility issues across UBG67.</p>
+      <p class="lede">Triage game launch, listing, controls, performance, and browser compatibility issues across Crashtest Games.</p>
     </section>
 
     <section class="panel auth-panel" id="auth-panel" aria-labelledby="auth-title">
-      <h2 id="auth-title">Set a portal password</h2>
-      <p class="panel-copy" id="auth-copy">Create a password for this browser to continue. Use at least 10 characters.</p>
+      <h2 id="auth-title">Developer sign in</h2>
+      <p class="panel-copy" id="auth-copy">Enter an authorized developer username and password.</p>
       <form id="auth-form">
-        <div class="field"><label for="password" id="password-label">Create password</label><input id="password" name="password" type="password" autocomplete="current-password" minlength="10" required></div>
-        <div class="field" id="confirm-field"><label for="confirm-password">Confirm password</label><input id="confirm-password" name="confirmPassword" type="password" autocomplete="new-password" minlength="10" required></div>
-        <button class="submit" id="auth-submit" type="submit">Set password</button>
+        <div class="field"><label for="username">Developer username</label><input id="username" name="username" type="text" autocomplete="username" required></div>
+        <div class="field"><label for="password">Portal password</label><input id="password" name="password" type="password" autocomplete="current-password" required></div>
+        <button class="submit" id="auth-submit" type="submit">Unlock portal</button>
         <p class="error" id="auth-error" role="alert" aria-live="polite"></p>
       </form>
-      <p class="security-note">Prototype limitation: this browser-only password gate is not server authentication. Anyone with access to the site files or this browser’s storage can bypass it. Do not use it to protect production or sensitive reports.</p>
+      <p class="security-note">Prototype server authentication. Use environment variables for deployment credentials instead of keeping secrets in source control.</p>
     </section>
 
     <section class="dashboard" id="dashboard" hidden aria-label="Developer report dashboard">
-      <div class="dash-head"><div><p class="eyebrow">Triage queue</p><h2>Game &amp; site reports</h2></div><div class="dash-actions"><button class="button" id="logout" type="button">Log out</button></div></div>
+      <div class="dash-head"><div><p class="eyebrow" id="welcome-text">Welcome (Dev)</p><h2>Game &amp; site reports</h2></div><div class="dash-actions"><button class="button" id="logout" type="button">Log out</button></div></div>
       <div class="stats" aria-label="Report counts">
         <div class="stat"><span class="stat-label">Total</span><span class="stat-value"><i class="stat-mark"></i><span id="count-total">0</span></span></div>
         <div class="stat"><span class="stat-label">Open</span><span class="stat-value"><i class="stat-mark"></i><span id="count-open">0</span></span></div>
@@ -131,13 +131,10 @@
       <div class="issue-list" id="issue-list" aria-live="polite"></div>
     </section>
   </main>
-  <footer>UBG67 SUPPORT <span aria-hidden="true">·</span> DEVELOPER PORTAL</footer>
+  <footer>CRASHTEST SUPPORT <span aria-hidden="true">·</span> DEVELOPER PORTAL</footer>
   <div class="toast" id="toast" role="status" hidden></div>
   <script>
     (() => {
-      const REPORTS_KEY = "bugbase-reports-v1";
-      const PASSWORD_KEY = "ubg67-dev-password-v1";
-      const SESSION_KEY = "ubg67-dev-session";
       const statuses = ["Open", "In development", "Resolved"];
       const authForm = document.querySelector("#auth-form");
       const authPanel = document.querySelector("#auth-panel");
@@ -149,25 +146,29 @@
         return String(value ?? "").replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;" })[character]);
       }
 
-      function readReports() {
-        const stored = JSON.parse(localStorage.getItem(REPORTS_KEY) || "[]");
-        if (!Array.isArray(stored)) throw new Error("Invalid report storage");
-        return stored.map((report) => report.status === "In progress" ? { ...report, status: "In development" } : report);
+      async function readReports() {
+        const response = await fetch("/api/reports", { headers: { "Accept": "application/json" } });
+        if (response.status === 401) throw new Error("Unauthorized");
+        if (!response.ok) throw new Error("Could not load reports.");
+        return response.json();
       }
 
       function setAuthMode(isSetup) {
-        document.querySelector("#auth-title").textContent = isSetup ? "Set a portal password" : "Developer sign in";
-        document.querySelector("#auth-copy").textContent = isSetup ? "Create a password for this browser to continue. Use at least 10 characters." : "Enter the password set for this browser.";
-        document.querySelector("#password-label").textContent = isSetup ? "Create password" : "Portal password";
-        document.querySelector("#confirm-field").hidden = !isSetup;
-        document.querySelector("#confirm-password").required = isSetup;
-        document.querySelector("#auth-submit").textContent = isSetup ? "Set password" : "Unlock portal";
+        document.querySelector("#auth-title").textContent = "Developer sign in";
+        document.querySelector("#auth-copy").textContent = "Enter an authorized developer username and password.";
+        document.querySelector("#auth-submit").textContent = "Unlock portal";
       }
 
-      function showDashboard() {
+      function setWelcome(account) {
+        const username = account.username || "";
+        const displayName = account.displayName || "";
+        document.querySelector("#welcome-text").textContent =
+          `Welcome (Dev) ${username}${displayName ? ` (${displayName})` : ""}`;
+      }
+
+      async function showDashboard() {
         try {
-          reports = readReports();
-          localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+          reports = await readReports();
           authPanel.hidden = true;
           dashboard.hidden = false;
           render();
@@ -245,58 +246,54 @@
         }).join("");
       }
 
-      async function hashPassword(password, saltText) {
-        if (!window.crypto?.subtle) throw new Error("Secure password hashing is unavailable in this browser. Open the site on localhost or HTTPS.");
-        const salt = Uint8Array.from(atob(saltText), (character) => character.charCodeAt(0));
-        const material = await crypto.subtle.importKey("raw", new TextEncoder().encode(password), "PBKDF2", false, ["deriveBits"]);
-        const bits = await crypto.subtle.deriveBits({ name: "PBKDF2", salt, iterations: 210000, hash: "SHA-256" }, material, 256);
-        return Array.from(new Uint8Array(bits), (byte) => byte.toString(16).padStart(2, "0")).join("");
-      }
-
       authForm.addEventListener("submit", async (event) => {
         event.preventDefault();
+        const username = document.querySelector("#username").value.trim();
         const password = document.querySelector("#password").value;
-        const confirmPassword = document.querySelector("#confirm-password").value;
-        const saved = localStorage.getItem(PASSWORD_KEY);
-        const isSetup = !saved;
         showAuthError("");
         try {
-          if (isSetup) {
-            if (password.length < 10) throw new Error("Use at least 10 characters for your password.");
-            if (password !== confirmPassword) throw new Error("The passwords do not match.");
-            const salt = crypto.getRandomValues(new Uint8Array(16));
-            const saltText = btoa(String.fromCharCode(...salt));
-            const hash = await hashPassword(password, saltText);
-            localStorage.setItem(PASSWORD_KEY, JSON.stringify({ salt: saltText, hash }));
-          } else {
-            const credential = JSON.parse(saved);
-            const hash = await hashPassword(password, credential.salt);
-            if (hash !== credential.hash) throw new Error("That password didn’t match. Try again.");
-          }
-          sessionStorage.setItem(SESSION_KEY, "unlocked");
-          showDashboard();
+          const submitButton = document.querySelector("#auth-submit");
+          submitButton.disabled = true;
+          submitButton.textContent = "Signing in...";
+          const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password })
+          });
+          const result = await response.json();
+          submitButton.disabled = false;
+          submitButton.textContent = "Unlock portal";
+          if (!response.ok) throw new Error(result.error || "Could not sign in.");
+          setWelcome(result);
+          await showDashboard();
         } catch (error) {
           showAuthError(error.message || "Could not unlock the developer portal.");
         }
       });
 
-      document.querySelector("#logout").addEventListener("click", () => {
-        sessionStorage.removeItem(SESSION_KEY);
+      document.querySelector("#logout").addEventListener("click", async () => {
+        await fetch("/api/auth/logout", { method: "POST" });
         dashboard.hidden = true;
         authPanel.hidden = false;
         authForm.reset();
         setAuthMode(false);
-        document.querySelector("#password").focus();
+        document.querySelector("#username").focus();
       });
       document.querySelector("#search").addEventListener("input", render);
       document.querySelector("#status-filter").addEventListener("change", render);
-      document.querySelector("#issue-list").addEventListener("change", (event) => {
+      document.querySelector("#issue-list").addEventListener("change", async (event) => {
         if (!event.target.matches(".issue-status")) return;
         const report = reports.find((item) => item.id === event.target.dataset.reportId);
         if (!report) return;
-        report.status = event.target.value;
         try {
-          localStorage.setItem(REPORTS_KEY, JSON.stringify(reports));
+          const response = await fetch(`/api/reports/${encodeURIComponent(report.id)}`, {
+            method: "PATCH",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ status: event.target.value })
+          });
+          if (!response.ok) throw new Error("Could not update the report.");
+          const updated = await response.json();
+          report.status = updated.status;
           render();
           showToast(`${report.id} marked ${report.status.toLowerCase()}`);
         } catch {
@@ -304,9 +301,15 @@
         }
       });
 
-      const isSetup = !localStorage.getItem(PASSWORD_KEY);
-      setAuthMode(isSetup);
-      if (sessionStorage.getItem(SESSION_KEY) === "unlocked" && !isSetup) showDashboard();
+      setAuthMode(false);
+      fetch("/api/auth/session")
+        .then(async (response) => {
+          if (!response.ok) return;
+          const session = await response.json();
+          setWelcome(session);
+          await showDashboard();
+        })
+        .catch(() => null);
     })();
   </script>
   <script src="theme-toggle.js"></script>

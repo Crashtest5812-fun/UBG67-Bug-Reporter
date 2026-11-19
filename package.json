@@ -1,0 +1,10 @@
+{
+  "name": "crashtest-support",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crashtest Games bug reporting prototype",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  }
+}

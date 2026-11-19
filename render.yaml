@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: crashtest-support
+    runtime: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /api/health
+    envVars:
+      - key: CTEST5812_PASSWORD
+        sync: false
+      - key: LSTUNG67_PASSWORD
+        sync: false

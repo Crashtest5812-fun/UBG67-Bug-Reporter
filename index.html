@@ -4,8 +4,8 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#183c36">
-  <title>UBG67 Support | Games Site Tracker</title>
-  <link rel="icon" type="image/png" href="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png">
+  <title>Crashtest Support | Games Site Tracker</title>
+  <link rel="icon" type="image/jpeg" href="Assets/Crashtest.jpg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -67,7 +67,7 @@
 </head>
 <body>
   <header class="header">
-    <a class="brand" href="index.html"><img class="brand-logo" src="https://freepngimg.com/thumb/letter/130045-c-letter-png-image-high-quality.png" alt=""><span>UBG67 <span>Support</span></span></a>
+    <a class="brand" href="index.html"><img class="brand-logo" src="Assets/Crashtest.jpg" alt=""><span>Crashtest <span>Support</span></span></a>
     <nav class="nav" aria-label="Main navigation">
       <a href="index.html" aria-current="page">Report a bug</a>
       <a href="subscribe.html">Subscribe</a>
@@ -77,9 +77,9 @@
   </header>
   <main>
     <section class="intro">
-      <p class="eyebrow">UBG67 / Games site support</p>
+      <p class="eyebrow">Crashtest Games / Games site support</p>
       <h1>Something off with a game?</h1>
-      <p class="lede">Report a game that will not launch, a broken listing, or a problem with controls, performance, or the UBG67 site. Include the game name and page so we can track it down.</p>
+      <p class="lede">Report a game that will not launch, a broken listing, or a problem with controls, performance, or the Crashtest Games site. Include the game name and page so we can track it down.</p>
       <div class="steps" aria-label="What happens next">
         <div class="step"><small>01 / Identify</small><strong>Name the game or page</strong></div>
         <div class="step"><small>02 / Resolve</small><strong>Follow the fix status</strong></div>
@@ -98,37 +98,35 @@
             <div class="field"><label for="severity">Impact</label><select id="severity" name="severity"><option>Medium</option><option>Low</option><option>High</option><option>Critical</option></select></div>
             <div class="field"><label for="game-title">Game name <span>(optional)</span></label><input id="game-title" name="gameTitle" type="text" maxlength="100" placeholder="Which game is affected?"></div>
             <div class="field"><label for="area">Site area <span>(optional)</span></label><input id="area" name="area" type="text" maxlength="50" placeholder="e.g. Search or game page"></div>
-            <div class="field full"><label for="page-url">Game or page URL <span>(optional)</span></label><input id="page-url" name="pageUrl" type="url" maxlength="500" placeholder="Paste the UBG67 page address"></div>
+            <div class="field full"><label for="page-url">Game or page URL <span>(optional)</span></label><input id="page-url" name="pageUrl" type="url" maxlength="500" placeholder="Paste the Crashtest Games page address"></div>
             <div class="field full"><label for="description">What happened?</label><textarea id="description" name="description" placeholder="What were you trying to play? What did the site or game do?" required></textarea></div>
             <div class="field full"><label for="steps">Steps to reproduce <span>(optional)</span></label><textarea class="compact" id="steps" name="steps" placeholder="1. Open the game page&#10;2. Select Play&#10;3. Describe what happens"></textarea></div>
             <div class="field"><label for="expected">Expected result <span>(optional)</span></label><textarea class="compact" id="expected" name="expected" placeholder="What should happen?"></textarea></div>
             <div class="field"><label for="actual">Actual result <span>(optional)</span></label><textarea class="compact" id="actual" name="actual" placeholder="What happened instead?"></textarea></div>
             <div class="field full"><label for="environment">Device or browser <span>(optional)</span></label><input id="environment" name="environment" type="text" maxlength="100" placeholder="e.g. Chrome on a school Chromebook"></div>
           </div>
-          <div class="actions"><button class="submit" type="submit">Send report <span aria-hidden="true">→</span></button><p class="privacy">Prototype: reports are saved in this browser only and are not sent to the UBG67 team.</p></div>
+          <div class="actions"><button class="submit" type="submit">Send report <span aria-hidden="true">→</span></button><p class="privacy">Reports are stored on the Crashtest Support server for developer review.</p></div>
         </form>
       </div>
       <div class="success" id="success-state" role="status" hidden>
         <div class="success-mark" aria-hidden="true">✓</div><h2>Issue logged.</h2>
-        <p>Your report is saved in this browser. The prototype does not send it to the UBG67 team.</p>
+        <p>Your report has been saved for the Crashtest Games team to review.</p>
         <span class="success-id" id="report-id"></span>
         <button class="again" id="another-report" type="button">Submit another report <span aria-hidden="true">→</span></button>
       </div>
       <p class="error" id="form-error" role="alert" hidden></p>
     </section>
   </main>
-  <footer><span>UBG67 SUPPORT · BUG REPORTING</span><a class="developer-link" href="dev.html">Developer portal</a></footer>
+  <footer><span>CRASHTEST SUPPORT · BUG REPORTING</span><a class="developer-link" href="dev.html">Developer portal</a></footer>
   <script>
     (() => {
-      const STORAGE_KEY = "bugbase-reports-v1";
       const form = document.querySelector("#report-form");
       const error = document.querySelector("#form-error");
 
-      form.addEventListener("submit", (event) => {
+      form.addEventListener("submit", async (event) => {
         event.preventDefault();
         const values = new FormData(form);
         const entry = {
-          id: "",
           title: values.get("title").trim(),
           category: values.get("category"),
           severity: values.get("severity"),
@@ -147,18 +145,27 @@
         };
 
         try {
-          const reports = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-          if (!Array.isArray(reports)) throw new Error("Invalid report storage");
-          const highestId = reports.reduce((highest, report) => Math.max(highest, Number(String(report.id).split("-")[1]) || 0), 100);
-          entry.id = `BUG-${highestId + 1}`;
-          reports.unshift(entry);
-          localStorage.setItem(STORAGE_KEY, JSON.stringify(reports));
-          document.querySelector("#report-id").textContent = entry.id;
+          const submitButton = form.querySelector(".submit");
+          submitButton.disabled = true;
+          submitButton.textContent = "Sending...";
+          const response = await fetch("/api/reports", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(entry)
+          });
+          const saved = await response.json();
+          if (!response.ok) throw new Error(saved.error || "Could not save the report.");
+          submitButton.disabled = false;
+          submitButton.innerHTML = 'Send report <span aria-hidden="true">→</span>';
+          document.querySelector("#report-id").textContent = saved.id;
           document.querySelector("#form-state").hidden = true;
           document.querySelector("#success-state").hidden = false;
           error.hidden = true;
-        } catch {
-          error.textContent = "This browser couldn’t save the report. Check browser storage and try again.";
+        } catch (submitError) {
+          const submitButton = form.querySelector(".submit");
+          submitButton.disabled = false;
+          submitButton.innerHTML = 'Send report <span aria-hidden="true">→</span>';
+          error.textContent = submitError.message || "This browser couldn’t send the report. Try again.";
           error.hidden = false;
         }
       });
