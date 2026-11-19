@@ -113,7 +113,7 @@ const mimeTypes = {
   ".md": "text/markdown; charset=utf-8"
 };
 
-const server = http.createServer(async (request, response) => {
+const handler = async (request, response) => {
   const url = new URL(request.url, `http://${request.headers.host || "localhost"}`);
 
   if (url.pathname === "/api/health" && request.method === "GET") {
@@ -228,8 +228,14 @@ const server = http.createServer(async (request, response) => {
     });
     fs.createReadStream(filePath).pipe(response);
   });
-});
+};
 
-server.listen(PORT, HOST, () => {
-  console.log(`Crashtest Support running at http://localhost:${PORT}`);
-});
+const server = http.createServer(handler);
+
+if (require.main === module) {
+  server.listen(PORT, HOST, () => {
+    console.log(`Crashtest Support running at http://localhost:${PORT}`);
+  });
+}
+
+module.exports = handler;
